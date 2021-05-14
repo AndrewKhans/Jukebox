@@ -1,0 +1,2 @@
+rootProject.name='Jukebox'
+include ':app', ':spotify-app-remote', ':spotify-web-api-android-0.4.1', ':spotify-auth-release-1.2.3'
