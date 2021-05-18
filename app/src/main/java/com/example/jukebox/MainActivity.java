@@ -29,7 +29,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String CLIENT_ID = "4e97f6ceceb24ef7ac68e5fd5764a966";
+    private static final String CLIENT_ID = "<Insert Here>";
+
     private static final String REDIRECT_URI = "http://com.andrew.jukebox/callback";
 
     private static SpotifyAppRemote mSpotifyAppRemote;
