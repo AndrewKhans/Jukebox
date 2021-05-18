@@ -1,17 +1,23 @@
 package com.example.jukebox;
 
-import android.content.Intent;
-import android.net.Uri;
+import android.app.PendingIntent;
+import android.telephony.SmsManager;
+import android.util.Log;
 
 public class Messenger {
 
     public static void sendMessage(String phoneNumber, String message) {
-        // Create the intent.
-        Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
-        // Set the data for the intent as the phone number.
-        smsIntent.setData(Uri.parse(phoneNumber));
-        // Add the message (sms) with the key ("sms_body").
-        smsIntent.putExtra("sms_body", message);
+        // Set the service center address if needed, otherwise null.
+        String scAddress = null;
+        // Set pending intents to broadcast
+        // when message sent and when delivered, or set to null.
+        PendingIntent sentIntent = null, deliveryIntent = null;
+        // Use SmsManager.
+        SmsManager smsManager = SmsManager.getDefault();
+        String destination = "1" + phoneNumber;
+        Log.d("Pepis", "Sending '" + message + "' to '" + destination + "'");
+
+        smsManager.sendTextMessage(destination, null, message, null, null);
     }
 
 }
