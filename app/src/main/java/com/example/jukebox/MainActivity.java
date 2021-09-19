@@ -33,7 +33,7 @@ import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String CLIENT_ID = "4e97f6ceceb24ef7ac68e5fd5764a966";
+    private static final String CLIENT_ID = "<Insert your spotify key here>";
     private static final String REDIRECT_URI = "http://com.andrew.jukebox/callback";
 
     private static SpotifyAppRemote mSpotifyAppRemote;
