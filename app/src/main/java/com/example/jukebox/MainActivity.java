@@ -33,7 +33,7 @@ import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String CLIENT_ID = "<Insert your spotify key here>";
+    private static final String CLIENT_ID = "<insert your spotify api key here>";
     private static final String REDIRECT_URI = "http://com.andrew.jukebox/callback";
 
     private static SpotifyAppRemote mSpotifyAppRemote;
@@ -61,12 +61,12 @@ public class MainActivity extends AppCompatActivity {
 
         phoneNumber = tMgr.getLine1Number();
         phoneNumber = phoneNumber.substring(0,3) + "-" + phoneNumber.substring(3,6) + "-" +phoneNumber.substring(6,10);
-        Log.d("Pepis", "Your phone:" + phoneNumber);
+        Log.d("Jukebox", "Your phone:" + phoneNumber);
 
         TextView phoneText = (TextView)findViewById(R.id.textView4);
         phoneText.setText("To add a song to the queue, text " + phoneNumber + "\n\"#queue SongName\"");
 
-        Log.d("Pepis", "start");
+        Log.d("Jukebox", "start");
     }
 
     @Override
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void processMessage(String phoneNumber, String message) throws InterruptedException {
-        Log.d("Pepis", "Processing message");
+        Log.d("Jukebox", "Processing message");
         // If this message's format isn't right, return
         if (!message.toLowerCase().matches("#\\w+\\s.+")) return;
         // If the message doesn't contain a command, return
@@ -142,20 +142,20 @@ public class MainActivity extends AppCompatActivity {
                     if (splits[0].equals("#play")) {
                         TracksPager tp = spotify.searchTracks(splits[1]);
                         Track track = tp.tracks.items.get(0);
-                        Log.d("Pepis", "Playing " + track.name + "by " + track.artists.get(0));
+                        Log.d("Jukebox", "Playing " + track.name + "by " + track.artists.get(0));
                         mSpotifyAppRemote.getPlayerApi().play(track.uri);
                         Messenger.sendMessage(phoneNumber, "Playing " + track.name + " by " + track.artists.get(0).name);
                     } else if (splits[0].equals("#queue")) {
                         TracksPager tp = spotify.searchTracks(splits[1]);
                         Track track = tp.tracks.items.get(0);
-                        Log.d("Pepis", "Queueing " + track.name);
+                        Log.d("Jukebox", "Queueing " + track.name);
                         mSpotifyAppRemote.getPlayerApi().queue(track.uri);
                         Messenger.sendMessage(phoneNumber, "Added " + track.name + " by " + track.artists.get(0).name + " to the queue");
                     } else {
-                        Log.d("Pepis", "unrecognized command");
+                        Log.d("Jukebox", "unrecognized command");
                     }
                 } catch (Exception e) {
-                    Log.d("Pepis", "Exception:" + e.toString());
+                    Log.d("Jukebox", "Exception:" + e.toString());
                 }
             }
         });
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
             switch (response.getType()) {
                 // Response was successful and contains auth token
                 case TOKEN:
-                    Log.d("Pepis", "got the token!");
+                    Log.d("Jukebox", "got the token!");
                     String accessToken = response.getAccessToken();
                     api.setAccessToken(accessToken);
                     // Handle successful response

@@ -15,7 +15,7 @@ public class Messenger {
         // Use SmsManager.
         SmsManager smsManager = SmsManager.getDefault();
         String destination = "1" + phoneNumber;
-        Log.d("Pepis", "Sending '" + message + "' to '" + destination + "'");
+        Log.d("Jukebox", "Sending '" + message + "' to '" + destination + "'");
 
         smsManager.sendTextMessage(destination, null, message, null, null);
     }

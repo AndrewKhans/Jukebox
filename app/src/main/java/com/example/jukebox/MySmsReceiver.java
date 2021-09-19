@@ -34,7 +34,7 @@ public class MySmsReceiver extends BroadcastReceiver {
                         msgs[i] = SmsMessage.createFromPdu((byte[])pdus[i]);
                         msg_from = msgs[i].getOriginatingAddress();
                         String msgBody = msgs[i].getMessageBody();
-                        Log.d("Pepis", "Got text message: " + msgBody + ", from phone number: " + msg_from);
+                        Log.d("Jukebox", "Got text message: " + msgBody + ", from phone number: " + msg_from);
                         MainActivity.processMessage(msg_from, msgBody);
                     }
                 }catch(Exception e){
