@@ -8,37 +8,42 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
+
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Track;
 import kaaes.spotify.webapi.android.models.TracksPager;
+
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String CLIENT_ID = "<Insert Here>";
-
+    private static final String CLIENT_ID = "4e97f6ceceb24ef7ac68e5fd5764a966";
     private static final String REDIRECT_URI = "http://com.andrew.jukebox/callback";
 
     private static SpotifyAppRemote mSpotifyAppRemote;
     private static SpotifyApi api = new SpotifyApi();
+    private static String phoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         MySmsReceiver receiver = new MySmsReceiver();
@@ -46,7 +51,21 @@ public class MainActivity extends AppCompatActivity {
                 new String[] {
                         Manifest.permission.SEND_SMS,
                         Manifest.permission.RECEIVE_SMS,
-                        Manifest.permission.INTERNET}, 1);
+                        Manifest.permission.INTERNET,
+                        Manifest.permission.READ_SMS,
+                        Manifest.permission.READ_PHONE_NUMBERS,
+                        Manifest.permission.READ_PHONE_STATE,}, 1);
+
+        TelephonyManager tMgr = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+        assert tMgr != null;
+
+        phoneNumber = tMgr.getLine1Number();
+        phoneNumber = phoneNumber.substring(0,3) + "-" + phoneNumber.substring(3,6) + "-" +phoneNumber.substring(6,10);
+        Log.d("Pepis", "Your phone:" + phoneNumber);
+
+        TextView phoneText = (TextView)findViewById(R.id.textView4);
+        phoneText.setText("To add a song to the queue, text " + phoneNumber + "\n\"#queue SongName\"");
+
         Log.d("Pepis", "start");
     }
 
@@ -59,12 +78,12 @@ public class MainActivity extends AppCompatActivity {
                     .setRedirectUri(REDIRECT_URI)
                     .showAuthView(true)
                     .build();
-    SpotifyAppRemote.connect(this, connectionParams,
+        SpotifyAppRemote.connect(this, connectionParams,
             new Connector.ConnectionListener() {
                 @Override
                 public void onConnected(SpotifyAppRemote spotifyAppRemote) {
                     mSpotifyAppRemote = spotifyAppRemote;
-                    Log.d("MainActivity", "Connected! Yay!");
+                    Log.d("MainActivity", "Connected!");
 
                     // Now you can start interacting with App Remote
                     try {
@@ -77,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Throwable throwable) {
                     Log.e("MainActivity", throwable.getMessage(), throwable);
-                    // Something went wrong when attempting to connect! Handle errors here
+                    // Handle errors here, if necessary
                 }
             }
         );
